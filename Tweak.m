@@ -158,7 +158,6 @@ static NSString *SBJBRoot(void) {
     _activeTheme = chosen;
 
     NSString *base = themeDirs[chosen];
-    NSUInteger count = 0;
     for (NSString *sub in @[@"IconBundles", @"Icons", @""]) {
         NSString *dir = sub.length ? [base stringByAppendingPathComponent:sub] : base;
         for (NSString *file in [fm contentsOfDirectoryAtPath:dir error:NULL]) {
@@ -169,7 +168,6 @@ static NSString *SBJBRoot(void) {
             NSString *existing = _bidToPath[bid];
             if (!existing || [file containsString:@"@3x"])
                 _bidToPath[bid] = [dir stringByAppendingPathComponent:file];
-            count++;
         }
     }
     SBLog(@"theme '%@' at %@ indexed %lu icons", _activeTheme, base, (unsigned long)_bidToPath.count);
