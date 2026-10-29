@@ -216,7 +216,7 @@ static NSString *SBJBRoot(void) {
 
 - (void)start {
     _enabled = [self enabled];
-    SBLog(@"=== SnowBoardRecovered 0.2 start (enabled=%d) ===", _enabled);
+    SBLog(@"=== SnowBoardRecovered 0.8 start (enabled=%d) ===", _enabled);
     [self prepareDirectories];
     [self scan];
     SBInstallHooks();
