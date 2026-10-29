@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>图标从 Themes 目录读取：&lt;主题名&gt;/IconBundles/&lt;BundleID&gt;@3x.png</string>
+			<key>label</key>
+			<string>SnowBoard 还原引擎（测试版）</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.snowboard.recovered</string>
+			<key>key</key>
+			<string>Enabled</string>
+			<key>label</key>
+			<string>启用</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSTextFieldCell</string>
+			<key>default</key>
+			<string></string>
+			<key>defaults</key>
+			<string>com.snowboard.recovered</string>
+			<key>key</key>
+			<string>Theme</string>
+			<key>label</key>
+			<string>主题名（留空自动选择）</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>操作</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>rescan:</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>重新扫描主题</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>openFolder:</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>打开主题目录</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>日志：/var/mobile/Library/SnowBoardRecovered.log</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>SnowBoardRecovered</string>
+</dict>
+</plist>

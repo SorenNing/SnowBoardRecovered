@@ -1,0 +1,38 @@
+name: build
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tooling
+        run: brew install ldid dpkg make xz >/dev/null 2>&1 || brew install ldid dpkg make
+
+      - name: Fetch Theos (roothide) and iOS SDK
+        run: |
+          set -e
+          export THEOS="$RUNNER_TEMP/theos"
+          git clone --recursive --depth=1 https://github.com/roothide/theos "$THEOS"
+          mkdir -p "$THEOS/sdks"
+          git clone --depth=1 --filter=blob:none --sparse https://github.com/theos/sdks "$RUNNER_TEMP/sdks"
+          cd "$RUNNER_TEMP/sdks" && git sparse-checkout set iPhoneOS16.5.sdk
+          cp -R "$RUNNER_TEMP/sdks/iPhoneOS16.5.sdk" "$THEOS/sdks/"
+          echo "THEOS=$THEOS" >> "$GITHUB_ENV"
+
+      - name: Build
+        run: make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=roothide TARGET=iphone:clang:16.5:15.0
+
+      - name: Verify arch
+        run: |
+          DEB=$(ls packages/*.deb | head -1)
+          mkdir -p /tmp/x && dpkg-deb -x "$DEB" /tmp/x
+          find /tmp/x -name '*.dylib' -o -name 'SnowBoardRecoveredPrefs' | while read f; do echo "== $f"; file "$f"; done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deb
+          path: packages/*.deb
