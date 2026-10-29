@@ -1,3 +1,5 @@
+include $(THEOS)/makefiles/common.mk
+
 BUNDLE_NAME = SnowBoardRecoveredPrefs
 SnowBoardRecoveredPrefs_INSTALL_PATH = /Library/PreferenceBundles
 SnowBoardRecoveredPrefs_FILES = RootListController.m
