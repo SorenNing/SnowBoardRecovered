@@ -1,6 +1,6 @@
 Package: com.snowboard.recovered
 Name: SnowBoardRecovered
-Version: 0.5
+Version: 0.6
 Architecture: iphoneos-arm64e
 Description: SnowBoard 1.5.37 static reconstruction - minimal runnable engine (arm64e test build)
 Maintainer: recovery

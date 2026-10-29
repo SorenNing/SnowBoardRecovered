@@ -7,7 +7,7 @@ SnowBoardRecoveredPrefs_FRAMEWORKS = UIKit Foundation
 SnowBoardRecoveredPrefs_PRIVATE_FRAMEWORKS = Preferences
 SnowBoardRecoveredPrefs_CFLAGS = -fobjc-arc -I.
 SnowBoardRecoveredPrefs_PRINCIPAL_CLASS = SnowBoardRecoveredRootListController
-SnowBoardRecoveredPrefs_INFO_PLIST = Info.plist
-SnowBoardRecoveredPrefs_RESOURCE_FILES = Resources/Root.plist
+SnowBoardRecoveredPrefs_INFO_PLIST = Resources/Info.plist
+SnowBoardRecoveredPrefs_RESOURCE_FILES = Resources/Root.plist Resources/Info.plist
 
 include $(THEOS_MAKE_PATH)/bundle.mk
