@@ -545,6 +545,7 @@ static void SBInstallHooks(void) {
 }
 
 __attribute__((constructor)) static void SBInit(void) {
+    SBLog(@"=== SnowBoardRecovered 1.1 constructor entered bundle=%@ ===", [[NSBundle mainBundle] bundleIdentifier]);
     if (![[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.springboard"]) return;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[SBEngine shared] start];

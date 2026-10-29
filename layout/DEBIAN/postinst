@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+printf 'SnowBoardRecovered 1.1 postinst %s\n' "$(date)" > /var/mobile/Library/SnowBoardRecovered.install.txt 2>/dev/null || true
+for d in /var/jb/Library/Themes /Library/Themes /var/mobile/Library/SnowBoard/Themes; do
+  mkdir -p "$d" 2>/dev/null || true
+  chmod 755 "$d" 2>/dev/null || true
+done
+exit 0
