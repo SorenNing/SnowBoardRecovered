@@ -249,7 +249,7 @@ static NSString *SBJBRoot(void) {
 
 - (void)start {
     _enabled = [self enabled];
-    SBLog(@"=== SnowBoardRecovered 0.9 start (enabled=%d) ===", _enabled);
+    SBLog(@"=== SnowBoardRecovered 1.0 start (enabled=%d) ===", _enabled);
     [self prepareDirectories];
     [self scan];
     SBInstallHooks();
@@ -426,14 +426,18 @@ static void Hook(Class cls, SEL sel, IMP repl, IMP *orig) {
 
 static void SBRefreshView(id view) {
     if (!view) return;
-    id imageView = SBCall0(view, @"_iconImageView");
-    for (id object in @[view, imageView ?: [NSNull null]]) {
-        if (object == [NSNull null]) continue;
-        SBVoid0(object, @"purgeCachedImages");
-        SBVoid0(object, @"reloadIconImage");
-        SBVoid0(object, @"setNeedsLayout");
-        SBVoid0(object, @"layoutIfNeeded");
-        SBVoid0(object, @"updateCorners");
+    // Only purge when this view actually has a themed replacement. Purging a
+    // stock icon with no theme counterpart leaves a blurred placeholder behind.
+    id icon = SBIconForView(view);
+    NSString *bundleID = [[SBEngine shared] bundleIDForIcon:icon];
+    BOOL hasTheme = bundleID ? [[SBEngine shared] imageForBundleID:bundleID] != nil : NO;
+    if (hasTheme) {
+        id imageView = SBCall0(view, @"_iconImageView");
+        for (id object in @[view, imageView ?: [NSNull null]]) {
+            if (object == [NSNull null]) continue;
+            SBVoid0(object, @"purgeCachedImages");
+            SBVoid0(object, @"reloadIconImage");
+        }
     }
     if ([view isKindOfClass:[UIView class]]) SBApplyImageRecursively(view, 0);
 }
@@ -452,13 +456,19 @@ static void SBRefreshFolderCache(id controller, id model) {
         if (!cacheClass || !folderModel) { SBLog(@"folder cache unavailable class=%@ model=%@", cacheClass, folderModel); return; }
         id oldCache = SBCall0(folderModel, @"folderIconImageCache");
         id layout = SBCall0(oldCache, @"listLayout");
+        if (!oldCache || !layout) {
+            SBLog(@"folder cache skipped old=%@ layout=%@", oldCache, layout);
+            return;
+        }
         id allocated = ((id (*)(id, SEL))objc_msgSend)((id)cacheClass, @selector(alloc));
         id newCache = nil;
         SEL initSelector = NSSelectorFromString(@"initWithListLayout:");
-        if (layout && [allocated respondsToSelector:initSelector])
+        if ([allocated respondsToSelector:initSelector])
             newCache = ((id (*)(id, SEL, id))objc_msgSend)(allocated, initSelector, layout);
-        else
-            newCache = ((id (*)(id, SEL))objc_msgSend)(allocated, @selector(init));
+        if (!newCache) {
+            SBLog(@"folder cache skipped: initWithListLayout failed");
+            return;
+        }
         SBVoid1(folderModel, @"setFolderIconImageCache:", newCache);
         SBVoid0(folderModel, @"iconViewFolderIconImageCacheDidChange");
         SBVoid0(root, @"iconViewFolderIconImageCacheDidChange");
